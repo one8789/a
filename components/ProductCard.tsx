@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Product } from '../types';
 import { Layers, Search } from 'lucide-react';
@@ -42,8 +43,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
         {product.archiveId}
       </div>
 
-      {/* Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-gray-50">
+      {/* Image Container - Adjusted aspect ratio for mobile compactness */}
+      <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
         
         {/* Layer 1: Full View (Contain) - Visible on Long Press */}
         <div 
@@ -75,32 +76,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
       </div>
 
       {/* Card Body */}
-      <div className="p-5 relative flex-1 flex flex-col">
+      <div className="p-4 relative flex-1 flex flex-col">
         {/* Status Stamp */}
         <div className="absolute -top-6 right-4 rotate-12 opacity-80 pointer-events-none z-10">
           <div className="border-2 border-gray-300 text-gray-300 text-[10px] font-bold px-2 py-1 uppercase rounded-sm tracking-widest bg-transparent group-hover:border-primary-300 group-hover:text-primary-300 transition-colors">
-            已归档 / CASE
+            CASE
           </div>
         </div>
 
-        <div className="mb-3">
-           <h3 className="text-lg font-bold text-gray-800 group-hover:text-primary-600 transition-colors line-clamp-1">
+        <div className="mb-2">
+           <h3 className="text-base font-bold text-gray-800 group-hover:text-primary-600 transition-colors line-clamp-1">
              {product.codeName}
            </h3>
-           <p className="text-xs text-gray-400 mt-1 font-mono uppercase tracking-wider line-clamp-1">
+           <p className="text-xs text-gray-400 mt-0.5 font-mono uppercase tracking-wider line-clamp-1">
              {product.title}
            </p>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {product.tags.slice(0, 3).map(tag => (
-            <span key={tag} className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded font-medium whitespace-nowrap">
+        <div className="flex flex-wrap gap-1 mb-2">
+          {product.tags.slice(0, 2).map(tag => (
+            <span key={tag} className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded font-medium whitespace-nowrap">
               #{tag}
             </span>
           ))}
         </div>
         
-        <div className="mt-auto pt-3 border-t border-dashed border-gray-200 flex justify-between items-center text-xs text-gray-400">
+        <div className="mt-auto pt-2 border-t border-dashed border-gray-200 flex justify-between items-center text-[10px] text-gray-400">
           <div className="flex items-center gap-1">
             <Layers className="w-3 h-3" />
             <span>{product.craftParams.techniques[0]}</span>

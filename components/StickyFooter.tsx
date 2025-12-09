@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MessageCircle, ExternalLink, Check, Copy, ShoppingBag, Trash2, HelpCircle } from 'lucide-react';
 import { CONTACT_INFO, CONSULTATION_CONTENT } from '../content';
@@ -46,19 +47,28 @@ const StickyFooter: React.FC = () => {
                       )}
                     </span>
                  </div>
-                 <div className={`px-5 py-2 rounded-full font-bold text-sm flex items-center gap-2 ${consultationMode ? 'bg-white text-indigo-600' : 'bg-white text-gray-900'}`}>
-                    {consultationMode ? <HelpCircle className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
-                    {consultationMode ? '查看需求' : '查看清单'}
-                 </div>
+                 
+                 {consultationMode ? (
+                    <div className="text-[10px] text-indigo-200 px-3">
+                       点击查看详情 / 不点击即为取消
+                    </div>
+                 ) : (
+                    <div className="bg-white text-gray-900 px-5 py-2 rounded-full font-bold text-sm flex items-center gap-2">
+                      <ShoppingBag className="w-4 h-4" />
+                      查看清单
+                    </div>
+                 )}
               </button>
               
-              <button 
-                onClick={clearOrder}
-                className="w-14 bg-white border border-gray-200 rounded-2xl md:rounded-full shadow-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 transition-colors"
-                title="清空订单"
-              >
-                 <Trash2 className="w-5 h-5" />
-              </button>
+              {!consultationMode && (
+                <button 
+                  onClick={clearOrder}
+                  className="w-14 bg-white border border-gray-200 rounded-2xl md:rounded-full shadow-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 transition-colors"
+                  title="清空订单"
+                >
+                   <Trash2 className="w-5 h-5" />
+                </button>
+              )}
             </div>
           )}
 

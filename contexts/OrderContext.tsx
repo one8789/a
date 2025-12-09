@@ -31,6 +31,15 @@ export interface PackagingItem {
   price: number;
 }
 
+// Fluid Strategy Type
+export interface FluidSelection {
+  strategyId: 'buddha' | 'self' | 'surprise';
+  strategyTitle: string;
+  description: string;
+  materials?: string[]; // for Self-Will
+  note?: string; // for Buddha input
+}
+
 // Define Discount Rule Structure
 export interface DiscountRule {
   code: string;
@@ -66,6 +75,7 @@ interface OrderContextType {
   selectedAddons: OrderItem[];
   selectedRush: RushItem | null;
   selectedPackaging: PackagingItem | null;
+  selectedFluid: FluidSelection | null;
   
   appliedDiscounts: DiscountRule[];
   isModalOpen: boolean;
@@ -78,6 +88,7 @@ interface OrderContextType {
   removeAddon: (category: string, name: string) => void;
   selectRush: (item: any) => void;
   selectPackaging: (item: any) => void;
+  selectFluid: (fluid: FluidSelection | null) => void;
 
   clearOrder: () => void;
   addDiscount: (code: string) => void;
@@ -99,6 +110,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [selectedAddons, setSelectedAddons] = useState<OrderItem[]>([]);
   const [selectedRush, setSelectedRush] = useState<RushItem | null>(null);
   const [selectedPackaging, setSelectedPackaging] = useState<PackagingItem | null>(null);
+  const [selectedFluid, setSelectedFluid] = useState<FluidSelection | null>(null);
   
   const [appliedDiscounts, setAppliedDiscounts] = useState<DiscountRule[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -292,12 +304,17 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
   };
 
+  const selectFluid = (fluid: FluidSelection | null) => {
+    setSelectedFluid(fluid);
+  };
+
   const clearOrder = () => {
     setSelectedSize(null);
     setSelectedCraft(null);
     setSelectedAddons([]);
     setSelectedRush(null);
     setSelectedPackaging(null);
+    setSelectedFluid(null);
     setAppliedDiscounts([]);
     setConsultationMode(false);
     setDiscountNotification(null);
@@ -310,6 +327,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       selectedAddons,
       selectedRush,
       selectedPackaging,
+      selectedFluid,
       appliedDiscounts,
       isModalOpen,
       consultationMode,
@@ -321,6 +339,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       removeAddon,
       selectRush,
       selectPackaging,
+      selectFluid,
       
       clearOrder,
       addDiscount,

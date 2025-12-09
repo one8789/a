@@ -1,12 +1,13 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Copy, CheckCircle, Tag, AlertCircle, Sparkles, Send, Calculator, Trash2, ChevronDown, ShieldAlert, Lock, Unlock, Video, MessageCircle, ShoppingBag, ExternalLink, ArrowRight, Store, HeartHandshake, Clock, QrCode } from 'lucide-react';
+import { X, Copy, CheckCircle, Tag, AlertCircle, Sparkles, Send, Calculator, Trash2, ChevronDown, ShieldAlert, Lock, Unlock, Video, MessageCircle, ShoppingBag, ExternalLink, ArrowRight, Store, HeartHandshake, Clock, QrCode, Palette } from 'lucide-react';
 import { useOrder } from '../contexts/OrderContext';
 import { CONSULTATION_CONTENT, DISCLAIMER_CONTENT, CONTACT_INFO, CHECKOUT_CONTENT } from '../content';
 
 const CheckoutModal: React.FC = () => {
   const { 
     isModalOpen, toggleModal, 
-    selectedSize, selectedAddons, selectedCraft, selectedRush, selectedPackaging,
+    selectedSize, selectedAddons, selectedCraft, selectedRush, selectedPackaging, selectedFluid,
     appliedDiscounts, addDiscount, removeDiscount, discountNotification, clearNotification,
     breakdown, finalPrice, 
     consultationMode, removeAddon
@@ -80,6 +81,7 @@ const CheckoutModal: React.FC = () => {
         text += `\n\n[参考意向]：`;
         if (selectedSize) text += `\n尺寸: ${selectedSize.name}`;
         if (selectedCraft) text += `\n工艺: ${selectedCraft.name}`;
+        if (selectedFluid) text += `\n流沙: ${selectedFluid.strategyTitle} ${selectedFluid.note ? '(' + selectedFluid.note + ')' : ''}`;
         if (selectedAddons.length > 0) text += `\n装饰: ${selectedAddons.map(a => a.name).join(', ')}`;
       }
     } 
@@ -94,6 +96,16 @@ const CheckoutModal: React.FC = () => {
       
       if (selectedCraft) {
         text += `${T.craft}${selectedCraft.name} (${selectedCraft.priceStr})\n`;
+      }
+
+      if (selectedFluid) {
+        let fluidText = `${selectedFluid.strategyTitle}`;
+        if (selectedFluid.strategyId === 'buddha' && selectedFluid.note) {
+          fluidText += ` [备注: ${selectedFluid.note}]`;
+        } else if (selectedFluid.strategyId === 'self' && selectedFluid.materials) {
+          fluidText += ` [材料: ${selectedFluid.materials.join(', ')}]`;
+        }
+        text += `${T.fluid}${fluidText}\n`;
       }
 
       if (selectedAddons.length > 0) {
@@ -295,6 +307,24 @@ const CheckoutModal: React.FC = () => {
                      </div>
                   </div>
                   <button onClick={() => { toggleModal(false); window.location.href='#process'; }} className="text-xs text-primary-500 hover:underline">修改</button>
+                </div>
+              )}
+              
+              {/* Fluid Recipe */}
+              {selectedFluid && (
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                   <div className="flex items-center gap-2 mb-2">
+                     <Palette className="w-4 h-4 text-primary-500" />
+                     <span className="font-bold text-gray-800 text-sm">{CHECKOUT_CONTENT.labels.fluidRecipe}</span>
+                   </div>
+                   <div className="flex justify-between items-start text-sm">
+                      <div className="text-gray-600">
+                        <span className="font-medium text-gray-800">{selectedFluid.strategyTitle}</span>
+                        {selectedFluid.note && <div className="text-xs text-gray-500 mt-1 italic">"{selectedFluid.note}"</div>}
+                        {selectedFluid.materials && <div className="text-xs text-gray-500 mt-1">{selectedFluid.materials.join(' / ')}</div>}
+                      </div>
+                      <button onClick={() => { toggleModal(false); window.location.href='#process'; }} className="text-xs text-primary-500 hover:underline shrink-0 ml-2">修改</button>
+                   </div>
                 </div>
               )}
 

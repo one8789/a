@@ -14,6 +14,12 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
     e.stopPropagation();
   };
 
+  const handleStartCommission = () => {
+    onClose();
+    // Use a slight timeout to allow modal close animation if needed, or just jump
+    window.location.href = '#process';
+  };
+
   return (
     <div 
       className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
@@ -128,10 +134,16 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                    但如果你也被这份“{product.codeName.split('·')[0]}”打动，或者有属于你自己的颜色想要封存……
                 </p>
                 
-                <button className="w-full bg-gray-900 hover:bg-primary-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-gray-200 hover:shadow-primary-200 flex items-center justify-center gap-2 group">
+                <button 
+                  onClick={handleStartCommission}
+                  className="w-full bg-gray-900 hover:bg-primary-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-gray-200 hover:shadow-primary-200 flex items-center justify-center gap-2 group"
+                >
                    <span>发起你的专属委托</span>
                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
+                <div className="mt-2 text-xs text-gray-400">
+                  点击跳转至流沙定制指南
+                </div>
              </div>
           </div>
 

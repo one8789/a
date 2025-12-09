@@ -10,7 +10,7 @@ const CheckoutModal: React.FC = () => {
     selectedSize, selectedAddons, selectedCraft, selectedRush, selectedPackaging, selectedFluid,
     appliedDiscounts, addDiscount, removeDiscount, discountNotification, clearNotification,
     breakdown, finalPrice, 
-    consultationMode, removeAddon
+    consultationMode, setConsultationMode, removeAddon
   } = useOrder();
 
   const [copied, setCopied] = useState(false);
@@ -23,7 +23,7 @@ const CheckoutModal: React.FC = () => {
   const [sliderValue, setSliderValue] = useState(0);
   const sliderRef = useRef<HTMLInputElement>(null);
 
-  // Clear notification and reset signature on unmount or close
+  // Clear notification and reset state on unmount or close
   useEffect(() => {
     if (!isModalOpen) {
       clearNotification();
@@ -33,8 +33,13 @@ const CheckoutModal: React.FC = () => {
       setExpandedSection(null);
       setCopied(false);
       setWechatCopied(false);
+      
+      // RESET CONSULTATION MODE WHEN CLOSING
+      if (consultationMode) {
+        setConsultationMode(false);
+      }
     }
-  }, [isModalOpen, clearNotification]);
+  }, [isModalOpen, clearNotification, consultationMode, setConsultationMode]);
 
   const handleAddDiscount = () => {
     if (inputCode.trim()) {

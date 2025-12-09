@@ -162,10 +162,10 @@ const Process: React.FC = () => {
     if (selectedFluid?.strategyId === 'buddha' && selectedFluid.note) {
       setBuddhaInput(selectedFluid.note);
     }
-    if (selectedFluid?.strategyId === 'self' && selectedFluid.materials) {
-      // Reconstitute material objects from names if needed, or simple length check
-      // For simplicity in this demo, we might lose precise ID state on refresh if not careful, 
-      // but Context keeps the 'names'. Here we just check logic.
+    // If selected fluid is NOT surprise, reset the surprise animation state
+    if (selectedFluid?.strategyId !== 'surprise') {
+        setIsSurpriseDone(false);
+        setIsSurpriseAnimating(false);
     }
   }, [selectedFluid]);
 
@@ -217,8 +217,17 @@ const Process: React.FC = () => {
     });
   };
 
+  // Toggle Logic for Surprise
   const handleSurpriseClick = () => {
-    if (isSurpriseDone || isSurpriseAnimating) return;
+    // If already selected, deselect (Toggle OFF)
+    if (selectedFluid?.strategyId === 'surprise') {
+        selectFluid(null);
+        setIsSurpriseDone(false);
+        setIsSurpriseAnimating(false);
+        return;
+    }
+
+    // If not selected, start animation (Toggle ON)
     setIsSurpriseAnimating(true);
     setTimeout(() => {
       setIsSurpriseAnimating(false);
@@ -228,7 +237,7 @@ const Process: React.FC = () => {
         strategyTitle: '开惊喜',
         description: '小狼的即兴创作'
       });
-    }, 3000);
+    }, 1500); // Shorter animation for snappier feel
   };
 
   const handleMaterialToggle = (mat: {id: string, name: string, img: string}) => {
@@ -258,6 +267,11 @@ const Process: React.FC = () => {
     return 'text-gray-400 bg-gray-100';
   };
 
+  const handleConsultationClick = () => {
+    setConsultationMode(true);
+    toggleModal(true);
+  };
+
   return (
     <section id="process" className="py-24 bg-white relative overflow-hidden">
       {lightboxSrc && <ProcessLightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
@@ -274,7 +288,7 @@ const Process: React.FC = () => {
         {/* CONSULTATION MODE TRIGGER */}
         <div className="max-w-xl mx-auto mb-10">
           <button 
-            onClick={() => setConsultationMode(!consultationMode)}
+            onClick={handleConsultationClick}
             className={`w-full p-4 rounded-2xl flex items-center gap-4 transition-all duration-300 border border-dashed ${consultationMode ? 'bg-indigo-50 border-indigo-300 ring-2 ring-indigo-100' : 'bg-white border-gray-300 hover:border-indigo-300 hover:bg-indigo-50/50'}`}
           >
              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 shrink-0">
@@ -291,7 +305,7 @@ const Process: React.FC = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className={`flex flex-wrap justify-center gap-4 mb-12 transition-opacity duration-300 ${consultationMode ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -309,7 +323,7 @@ const Process: React.FC = () => {
         </div>
 
         {/* Content Area */}
-        <div className={`min-h-[400px] mb-20 transition-opacity duration-300 ${consultationMode ? 'opacity-50 blur-[2px] pointer-events-none' : 'opacity-100'}`}>
+        <div className="min-h-[400px] mb-20">
           
           {/* TAB 1: SIZES (Refactored to Accordion) */}
           {activeTab === 'base' && (
@@ -353,7 +367,12 @@ const Process: React.FC = () => {
                   className={`bg-white border rounded-2xl p-6 transition-all duration-300 shadow-sm
                     ${selectedFluid?.strategyId === 'buddha' ? 'border-primary-500 ring-1 ring-primary-200' : 'border-gray-200'}
                   `}
-                  onClick={() => !buddhaInput && selectFluid({ strategyId: 'buddha', strategyTitle: '佛系选', description: '由小狼调配', note: '' })}
+                  onClick={() => {
+                     // Always select Buddha if clicking main container
+                     if (selectedFluid?.strategyId !== 'buddha') {
+                        selectFluid({ strategyId: 'buddha', strategyTitle: '佛系选', description: '由小狼调配', note: buddhaInput });
+                     }
+                  }}
                >
                   <div className="flex items-center gap-3 mb-4">
                      <div className="text-3xl">{fluids.strategies[0].icon}</div>
@@ -379,55 +398,39 @@ const Process: React.FC = () => {
                   </div>
                </div>
 
-               {/* Strategy 2: Surprise (Blind Box) */}
-               {isSurpriseDone ? (
-                 // Collapsed / Done State
-                 <div className="bg-primary-50/50 border border-primary-200 rounded-2xl p-4 flex items-center gap-4 transition-all">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl shadow-sm">🎁</div>
-                    <div className="flex-1">
-                       <h4 className="font-bold text-primary-800">流沙调配：[开惊喜]</h4>
-                       <p className="text-xs text-primary-600">小狼的即兴创作已生效</p>
-                    </div>
-                    <Check className="w-5 h-5 text-primary-500" />
-                    <button 
-                       onClick={() => { setIsSurpriseDone(false); selectFluid(null); }} 
-                       className="text-xs underline text-gray-400 hover:text-gray-600"
-                    >
-                      重选
-                    </button>
-                 </div>
-               ) : (
-                 // Interactive State
-                 <div 
+               {/* Strategy 2: Surprise (Blind Box) - Refactored for Full Animation/Toggle */}
+               <div 
                    onClick={handleSurpriseClick}
                    className={`
-                     relative bg-white border rounded-2xl p-6 cursor-pointer transition-all duration-500 overflow-hidden shadow-sm
-                     ${isSurpriseAnimating ? 'scale-105 border-pink-300 shadow-xl' : 'hover:border-primary-200 border-gray-200'}
+                     relative bg-white border rounded-2xl p-6 cursor-pointer transition-all duration-500 overflow-hidden shadow-sm h-28 flex items-center justify-center
+                     ${(isSurpriseDone || selectedFluid?.strategyId === 'surprise') 
+                         ? 'border-red-400 shadow-xl bg-red-50' 
+                         : 'hover:border-primary-200 border-gray-200 hover:bg-gray-50'}
                    `}
-                 >
-                    {isSurpriseAnimating ? (
-                      <div className="absolute inset-0 z-10 bg-white/95 flex flex-col items-center justify-center text-center p-6 animate-fade-in">
-                         <div className="relative mb-4">
-                            <Heart className="w-12 h-12 text-red-500 fill-red-500 animate-ping absolute opacity-75" />
-                            <Heart className="w-12 h-12 text-red-500 fill-red-500 relative z-10" />
+               >
+                   {/* CONTENT */}
+                   {(isSurpriseDone || isSurpriseAnimating || selectedFluid?.strategyId === 'surprise') ? (
+                      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center animate-fade-in w-full h-full">
+                         {/* Giant pulsating heart background/foreground */}
+                         <Heart className="w-32 h-32 text-red-500/20 absolute animate-pulse" fill="currentColor" />
+                         <Heart className="w-16 h-16 text-red-500 fill-red-500 animate-bounce relative z-20 mb-2" />
+                         <h4 className="text-lg font-bold text-red-600 relative z-20">感谢你的全然信任</h4>
+                         {/* Checkmark indicator */}
+                         <div className="absolute top-4 right-4 bg-white rounded-full p-1 shadow-sm z-20">
+                            <Check className="w-4 h-4 text-red-500" />
                          </div>
-                         <h4 className="text-lg font-bold text-gray-800 mb-2">感谢你的全然信任！</h4>
-                         <p className="text-sm text-gray-500 leading-relaxed">
-                           这份独一无二的授权，就是小狼最好的创作配方。<br/>
-                           我会为你打造一份真正的限定惊喜。
-                         </p>
                       </div>
-                    ) : (
-                      <div className="flex items-center gap-3">
+                   ) : (
+                      // Default View
+                      <div className="flex items-center gap-3 w-full justify-start">
                          <div className="text-3xl">{fluids.strategies[2].icon}</div>
-                         <div>
+                         <div className="text-left">
                             <h4 className="font-bold text-gray-800">{fluids.strategies[2].title}</h4>
                             <p className="text-xs text-gray-500">{fluids.strategies[2].desc}</p>
                          </div>
                       </div>
-                    )}
-                 </div>
-               )}
+                   )}
+               </div>
 
                {/* Strategy 3: Self-Will (Custom) */}
                <div 
@@ -436,12 +439,13 @@ const Process: React.FC = () => {
                    ${selectedFluid?.strategyId === 'self' ? 'border-primary-500 ring-1 ring-primary-200' : 'border-gray-200'}
                  `}
                >
-                  <div className="flex items-center gap-3 mb-6" onClick={() => !selectedFluid && selectFluid({ strategyId: 'self', strategyTitle: '任性玩', description: '自选材料' })}>
+                  <div className="flex items-center gap-3 mb-6 cursor-pointer" onClick={() => selectFluid({ strategyId: 'self', strategyTitle: '任性玩', description: '自选材料', materials: customMaterials.map(m => m.name) })}>
                      <div className="text-3xl">{fluids.strategies[1].icon}</div>
                      <div>
                         <h4 className="font-bold text-gray-800">{fluids.strategies[1].title}</h4>
                         <p className="text-xs text-gray-500">{fluids.strategies[1].desc}</p>
                      </div>
+                     {selectedFluid?.strategyId === 'self' && <Check className="w-5 h-5 text-primary-500 ml-auto" />}
                   </div>
 
                   {/* Slot Display */}

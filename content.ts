@@ -1,4 +1,5 @@
 
+
 import { Product, NavItem, ShowcaseItem } from './types';
 
 // =================================================================
@@ -87,7 +88,7 @@ export const CONSULTATION_CONTENT = {
       "排版与设计预览 (好不好看)",
       "更精准的报价与工期 (多少钱/多久)"
     ],
-    cta: "长按识别这枚“通讯水晶”，或者将它截图后在微信中打开。",
+    cta: "截屏保存微信→扫码添加，记得备注来意噢。",
     ps: "P.S. 申请好友时请备注“流麻定制”，否则小狼可能会因为社恐而不敢通过哦...",
     card: {
       name: "小狼SLE",
@@ -114,7 +115,7 @@ export const NAV_CONTENT: NavItem[] = [
   { label: '作品档案', href: '#gallery' },
   { label: '定制契约', href: '#process' },
   { label: '星辰回响', href: '#star-echo' },
-  { label: '废稿陈列室', href: '#future' },
+  { label: '私域福利', href: CONTACT_INFO.officialAccountLink }, // Updated link
   { label: '召唤工坊主', href: '#', isButton: true, action: 'consult' },
 ];
 
@@ -312,7 +313,7 @@ export const FULFILLMENT_CONTENT = {
   shipping: {
     confirm: {
       title: "1. 成品确认",
-      desc: "完工后，小狼会为你拍摄“毕业照”（实拍图+小视频），请在 48小时内 确认。（如果超时没有回复，就默认你对作品满意啦！）"
+      desc: "完工后，小狼会为你拍摄“毕业照”（实拍图+小视频），请在 24小时内 确认。（如果超时没有回复，就默认你对作品满意啦！）"
     },
     send: {
       title: "2. 发货日",
@@ -645,7 +646,7 @@ export const CHECKOUT_CONTENT = {
   },
   actions: {
     copy: {
-      label: "复制订单",
+      label: "复制订单发送给小狼",
       success: "已复制"
     },
     wechat: {

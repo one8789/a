@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Clock, Ruler, Wrench, Sparkles, Lock, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 
@@ -9,6 +9,20 @@ interface ProductDetailModalProps {
 }
 
 const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClose }) => {
+  
+  // Lock Body Scroll on Mount
+  useEffect(() => {
+    // Save original overflow style
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    // Lock scroll
+    document.body.style.overflow = 'hidden';
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
+
   // Prevent clicks inside the modal from closing it
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -31,10 +45,13 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
         className="bg-white w-full max-w-6xl max-h-[90vh] rounded-[2rem] shadow-2xl relative animate-scale-up flex flex-col overflow-hidden"
         onClick={handleContentClick}
       >
-        {/* Close Button - Sticky or Absolute to the modal container */}
+        {/* Close Button - Safe Area Aware 
+            Using style top ensures it respects safe area inset on supported browsers/PWA contexts 
+        */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 bg-white/80 hover:bg-white backdrop-blur rounded-full transition-colors text-gray-600 hover:text-red-500 shadow-md"
+          className="absolute right-4 z-50 p-2 bg-white/80 hover:bg-white backdrop-blur rounded-full transition-colors text-gray-600 hover:text-red-500 shadow-md"
+          style={{ top: 'max(1rem, env(safe-area-inset-top))' }}
         >
           <X className="w-6 h-6" />
         </button>
@@ -44,8 +61,9 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
            - overflow-y-auto handles the scroll for the whole modal content
            - flex-col for Mobile (Images Top, Text Bottom)
            - md:flex-row for Desktop (Images Left, Text Right)
+           - overscroll-y-contain prevents body scroll chaining
         */}
-        <div className="overflow-y-auto custom-scrollbar flex flex-col md:flex-row h-full w-full bg-white">
+        <div className="overflow-y-auto custom-scrollbar flex flex-col md:flex-row h-full w-full bg-white overscroll-y-contain">
             
             {/* 
                Left Side: Visuals 
@@ -69,13 +87,12 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
             {/* 
                Right Side: Archive Decryption (Text)
                - w-full on mobile, w-2/5 on desktop
-               - Sticky behavior on desktop isn't applied here to ensure same scrollbar, 
-                 but it flows naturally after images on mobile.
             */}
             <div className="w-full md:w-2/5 p-6 md:p-10 flex flex-col bg-white">
             
               {/* Header */}
-              <div className="mb-8 border-b border-gray-100 pb-6">
+              {/* Added mt-6 md:mt-0 to give space on mobile in case close button floats over content area */}
+              <div className="mb-8 border-b border-gray-100 pb-6 mt-6 md:mt-0">
                   <div className="flex items-center gap-3 text-gray-400 text-xs font-mono uppercase tracking-widest mb-2">
                   <span>Archive Report</span>
                   <span className="w-px h-3 bg-gray-300"></span>

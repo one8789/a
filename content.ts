@@ -464,7 +464,7 @@ export const GALLERY_PRODUCTS: Product[] = [
   "imageUrl": "https://i.postimg.cc/V656bkdr/001.png",
   "galleryImages": [
     "https://i.postimg.cc/bYRPj2Lr/ezgif-1e8507e0015c5ff7.gif",
-    "https://i.ibb.co/nsPmMhc8/0002.png"
+    "https://i.postimg.cc/LsM9rqYT/003.png"
   ],
   "tags": ["IP联名", "绮丽幻想", "立体工艺"],
   "craftParams": {
@@ -476,12 +476,12 @@ export const GALLERY_PRODUCTS: Product[] = [
   {
     "id": "118",
     "archiveId": "N°118",
-    "category": "handcraft",
+    "category": "luxury",
     "codeName": "虚空蝶梦·倾奇者",
     "title": "角色印象·绮罗典藏",
     "description": "以巴洛克式华丽重构散兵的孤傲与蜕变，于反光工艺中捕捉他那撕裂宿命的瞬间。",
     "fullDescription": "用具象化的艺术语言，去诠释他从人偶到‘倾奇者’身份的流转与挣扎。为还原其破碎又华丽的美学，本作采用了复合背景反光工艺，以此来动态模拟其周身散逸的元素能量。主体视觉由深邃的紫色调构成，立体拼贴的彩窗蝴蝶象征着挣脱束缚的灵魂，而精巧的巴洛克树脂花则暗喻其出身的高贵与被扭曲的命运。边缘环绕的紫色碎钻，不仅构建出丰富的视觉深度，更是在每一次光线流转中，折射出角色内心的矛盾与锋芒。",
-    "imageUrl": "https://i.postimg.cc/LsM9rqYT/003.png",
+    "imageUrl": "https://i.ibb.co/vCRrPzGD/003.png",
     "galleryImages": [
       "https://picsum.photos/600/600?random=501",
       "https://picsum.photos/600/600?random=237"

@@ -127,7 +127,7 @@ export const HERO_CONTENT = {
   titleStart: "小狼的",
   titleHighlight: "手作工坊",
   titleEnd: " / StarrySand",
-  description: "欢迎来到我的造物台。\n我曾是个不善言辞的人，习惯把想说的话都画进画里。\n直到有一天，我试着将一幅画封存在流流麻之中。看着那些闪粉与色彩在小小的空间里形成一片绚烂的星云，我突然明白：\n有些情感与梦想，即便不完美，也终能找到一种方式，被这个世界温柔地看见。\n\n而我，就是那个为你封存梦想的人。",
+  description: "欢迎来到我的造物台。\n我话不多，把想说的都藏进画里。\n直到第一次把画封进流沙麻将里，看着光和色在指尖里流动，那种小小的灿烂让我确定——\n即使不善言辞，我也能用自己的方式，把美好留给世界。\n\n如果你愿意，我会把你的故事、你的心意、你的期待…\n都封存在这片流动的星光里。",
   buttons: [
     { label: "作品档案", href: "#gallery", style: "dark" },
     { label: "定制契约", href: "#process", style: "light" },
@@ -464,7 +464,7 @@ export const GALLERY_PRODUCTS: Product[] = [
   "imageUrl": "https://i.postimg.cc/V656bkdr/001.png",
   "galleryImages": [
     "https://i.postimg.cc/bYRPj2Lr/ezgif-1e8507e0015c5ff7.gif",
-    "https://i.postimg.cc/LsM9rqYT/003.png"
+    "https://s41.ax1x.com/2025/12/10/pZusdoj.png"
   ],
   "tags": ["IP联名", "绮丽幻想", "立体工艺"],
   "craftParams": {

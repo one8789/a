@@ -25,7 +25,7 @@ const templatePath = path.resolve(__dirname, '../dist/index.html');
 async function renderApp() {
   return renderToString(
     <React.StrictMode>
-      <App />
+      <App>
     </React.StrictMode>
   );
 }
